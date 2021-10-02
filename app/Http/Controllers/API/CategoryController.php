@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class CategoryController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class CategoryController extends Controller
     public function index()
     {
         $res = Category::paginate();
-        return response()->json($res,200);
+        $this->sendResponse($res,'category pagination');
     }
 
     /**

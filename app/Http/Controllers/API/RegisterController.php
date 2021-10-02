@@ -16,38 +16,25 @@ class RegisterController extends BaseController
     {
 
         $validator = Validator::make($request->all(), [
-
             'name' => 'required',
-
-            'email' => 'required|email',
-
+            'phone' => 'required|regex:/\([0-9]{2}\)[0-9]{3}-[0-9]{2}-[0-9]{2}/',
             'password' => 'required',
-
             'c_password' => 'required|same:password',
-
         ]);
 
-
         if ($validator->fails()) {
-
             return $this->sendError('Validation Error.', $validator->errors());
-
         }
         try {
 
             $input = $request->all();
-
             $input['password'] = bcrypt($input['password']);
-
             $user = User::create($input);
-
             $success['token'] = $user->createToken('MyApp')->plainTextToken;
-
             $success['name'] = $user->name;
 
         }catch (\Exception $e){
             return $this->sendError('error in creating user.', ["error" => $e->getMessage()]);
-
         }
 
         return $this->sendResponse($success, 'User register successfully.');
@@ -65,7 +52,7 @@ class RegisterController extends BaseController
 
     {
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        if (Auth::attempt(['phone' => $request->phone, 'password' => $request->password])) {
 
             $user = Auth::user();
 
