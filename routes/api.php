@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     // return response()->json(auth()->user(),201);
     return $request->user();
 });
+
 Route::apiResources([
     'product' => ProductController::class,
     'category' => CategoryController::class,

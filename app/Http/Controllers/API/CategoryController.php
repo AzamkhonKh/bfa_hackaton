@@ -13,10 +13,14 @@ class CategoryController extends BaseController
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(): \Illuminate\Http\JsonResponse
     {
-        $res = Category::paginate();
-        $this->sendResponse($res,'category pagination');
+        $res = Category::orderBy('id', 'DESC')
+            ->with('parent')
+            ->withCount('products')
+            ->get();
+
+        return $this->sendResponse($res, 'category pagination');
     }
 
     /**

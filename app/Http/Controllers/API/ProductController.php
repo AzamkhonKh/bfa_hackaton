@@ -9,16 +9,19 @@ use App\Models\Products;
 use Illuminate\Http\Request;
 use Mockery\Exception;
 
-class ProductController extends Controller
+class ProductController extends BaseController
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        //
+        $res = Products::paginate(15);
+
+        return $this->sendResponse($res, 'category pagination');
+
     }
 
     /**
@@ -32,7 +35,7 @@ class ProductController extends Controller
         try {
             $product = new Products();
             $product->title = $request->input('title');
-            
+
             $resp_data = [
                 "message" => "succesfully created !",
                 "product" => $product
