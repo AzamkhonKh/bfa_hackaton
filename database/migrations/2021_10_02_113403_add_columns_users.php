@@ -18,6 +18,7 @@ class AddColumnsUsers extends Migration
             $table->dateTime('phone_verified')->nullable();
             $table->string('inn',255)->nullable();
             $table->string('passport',255)->nullable();
+            $table->softDeletes();
         });
     }
 
