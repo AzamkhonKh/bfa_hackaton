@@ -19,6 +19,8 @@ class CreateFileStorageProductsTable extends Migration
             $table->string('ext',255)->nullable();
             $table->integer('size')->nullable();
             $table->string('status',10)->nullable();
+            $table->string('relation');
+            $table->unsignedBigInteger('relation_id');
             $table->softDeletes();
             $table->timestamps();
         });
