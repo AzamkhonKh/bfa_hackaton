@@ -18,7 +18,9 @@ class ProductController extends BaseController
      */
     public function index()
     {
-        $res = Products::paginate(15);
+        $res = Products::whereHas('images', function ($query) {
+            $query->where('relation','=','products');
+        })->with('images')->paginate(15);
 
         return $this->sendResponse($res, 'category pagination');
 

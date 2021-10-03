@@ -16,7 +16,8 @@ class CategoryController extends BaseController
     public function index(): \Illuminate\Http\JsonResponse
     {
         $res = Category::orderBy('id', 'DESC')
-            ->with('parent')
+            ->where('parent_id',0)
+            ->with('children')
             ->withCount('products')
             ->get();
 

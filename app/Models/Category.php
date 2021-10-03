@@ -29,7 +29,7 @@ class Category extends Model
 
     public function children()
     {
-        return $this->hasMany(self::class, 'parent_id', 'id');
+        return $this->hasMany(Category::class, 'parent_id', 'id');
     }
     public function prepareJson(){
 

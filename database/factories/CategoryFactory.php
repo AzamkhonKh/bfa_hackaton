@@ -23,8 +23,8 @@ class CategoryFactory extends Factory
     public function definition()
     {
         return [
-            'title' => Str::random(10),
-            'parent_id' => $this->faker->numberBetween(1,50),
+            'title' => $this->faker->word,
+            'parent_id' => $this->faker->numberBetween(0,50),
         ];
     }
 }
