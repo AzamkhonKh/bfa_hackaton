@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\EventController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\RegisterController;
 use Illuminate\Http\Request;
@@ -19,12 +20,16 @@ use \App\Http\Controllers\API\CategoryController;
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    // return response()->json(auth()->user(),201);
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function (){
+   Route::get('/user', function (Request $request) {
+       // return response()->json(auth()->user(),201);
+       return $request->user();
+   });
+
+    Route::apiResources([
+        'product' => ProductController::class,
+        'category' => CategoryController::class,
+        'calendar' => EventController::class,
+    ]);
 });
 
-Route::apiResources([
-    'product' => ProductController::class,
-    'category' => CategoryController::class,
-]);

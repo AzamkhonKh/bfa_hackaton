@@ -2,42 +2,36 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\API\RegisterRequest;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Lib\ApiWrapper;
 use Illuminate\Http\Request;
 
-use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Validator;
+use Illuminate\Support\Facades\Hash;
 
-class RegisterController extends BaseController
+class RegisterController extends Controller
 {
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
 
     {
-
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'phone' => 'required|regex:/\([0-9]{2}\)[0-9]{3}-[0-9]{2}-[0-9]{2}/',
-            'password' => 'required',
-            'c_password' => 'required|same:password',
-        ]);
-
-        if ($validator->fails()) {
-            return $this->sendError('Validation Error.', $validator->errors());
-        }
         try {
-
+            $res = array();
             $input = $request->all();
-            $input['password'] = bcrypt($input['password']);
+            $input['password'] = Hash::make($input['password']);
             $user = User::create($input);
-            $success['token'] = $user->createToken('MyApp')->plainTextToken;
+            $success['token'] = $user->createToken('calendarApp')->plainTextToken;
             $success['name'] = $user->name;
-
+            $res = $success;
+            $message = 'User register successfully.';
         }catch (\Exception $e){
-            return $this->sendError('error in creating user.', ["error" => $e->getMessage()]);
+            $res = ["error" => $e->getMessage()];
+            $message = 'error in creating user.';
         }
 
-        return $this->sendResponse($success, 'User register successfully.');
+        return ApiWrapper::sendResponse($res, $message);
 
     }
 
@@ -45,28 +39,22 @@ class RegisterController extends BaseController
     /**
      * Login api
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
 
-    public function login(Request $request)
-
+    public function login(LoginRequest $request)
     {
-
         if (Auth::attempt(['phone' => $request->phone, 'password' => $request->password])) {
-
             $user = Auth::user();
-
-            $success['token'] = $user->createToken('MyApp')->plainTextToken;
-
             $success['name'] = $user->name;
-
-            return $this->sendResponse($success, 'User login successfully.');
-
+            $success['token'] = $user->createToken('calendarApp')->plainTextToken;
+            $res = $success;
+            $message = 'User login successfully.';
         } else {
-
-            return $this->sendError('Unauthorised.', ['error' => 'Unauthorised']);
-
+            $res = ['error' => 'Unauthorised'];
+            $message = 'Unauthorised.';
         }
 
+        return ApiWrapper::sendResponse($res, $message);
     }
 }

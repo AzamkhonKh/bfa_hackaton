@@ -7,9 +7,8 @@ use App\Http\Requests\Product\StoreRequest;
 use App\Models\Log;
 use App\Models\Products;
 use Illuminate\Http\Request;
-use Mockery\Exception;
 
-class ProductController extends BaseController
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.

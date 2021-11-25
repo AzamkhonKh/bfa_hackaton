@@ -16,8 +16,6 @@ class AddColumnsUsers extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->string('phone',255)->nullable();
             $table->dateTime('phone_verified')->nullable();
-            $table->string('inn',255)->nullable();
-            $table->string('passport',255)->nullable();
             $table->softDeletes();
         });
     }
